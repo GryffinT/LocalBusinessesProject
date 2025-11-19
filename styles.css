@@ -1,10 +1,109 @@
-.dockedImage {
-    width:50px;
-    height:50px;
-    box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
-    transition: transform .5s ease;
+.card-container {
+    background-color: white;
+    border-radius: 3%;
+    box-sizing: border-box;
+    width: 70vw;
+    max-width: 700px;
+    height: 75vh;
+    min-height: 400px;
+    min-width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    overflow: hidden;
+    box-shadow: 0 2px 24px rgba(0,0,0,0.10);
+}
+.card-header {
+    width: 100%;
+    text-align: center;
+}
+.card-divider {
+    height: 2px;
+    width: 60%;
+    background-color: black;
+    border: none;
+    margin: 0 auto;
+}
+.card-form {
+    flex: 1 0 auto;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+}
+.card-form input[type="password"],
+.card-form input[type="text"] {
+    width: 88%;
+    max-width: 340px;
+    margin-bottom: 10px;
+    border: 2px solid rgb(60,179,113);
+    border-radius: 4px;
+    padding: 6px 8px;
+    font-size: 1.02em;
+    box-sizing: border-box;
+    background: #fafafa;
+}
+.card-form label {
+    align-self: flex-start;
+    margin-left: 6%;
+    font-size: 0.98em;
+    color: #333;
+}
+.card-form button {
+    margin-top: 22px;
+    min-width: 100px;
+    padding: 6px 16px;
+    border-radius: 6px;
+    border: none;
+    background: rgb(60,179,113);
+    color: white;
+    font-weight: bold;
+    font-size: 1em;
+    cursor: pointer;
+}
+.card-form button:hover {
+    background: rgb(50,150,90);
+}
+#location {
+    font-weight: bold;
+    color: #19795a;
 }
 
-.dockedImage:hover {
-    transform: scale(1.5);
+@media (max-width: 600px) {
+    .card-container {
+        width: 95vw;
+        min-width: unset;
+        height: 92vh;
+        min-height: 280px;
+        border-radius: 4vw;
+    }
+    .card-header {
+        font-size: 1.25em;
+    }
+    .card-form input[type="password"],
+    .card-form input[type="text"] {
+        width: 98%;
+    }
+}
+
+.docked-bar {
+    background-color: white;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.12);
+    display: grid;
+    grid-template-columns: repeat(4, 2rem);
+    position: fixed;
+    left: 50%;
+    bottom: 2%;
+    transform: translateX(-50%);
+    padding: 0.25rem 1.1rem;
+    border-radius: 1.25rem;
+    z-index: 10;
+    gap: 1.2rem;
+}
+.dockedImage {
+    width: 32px;
+    height: 32px;
 }
