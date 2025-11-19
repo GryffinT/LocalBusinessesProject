@@ -9,6 +9,43 @@
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
+    <h1 id="location"></h1>
+    <script>
+        const display = document.getElementById("location");
+    
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                display.innerHTML = "Error: Current browser does not support geolocation.";
+            }
+        }
+    
+        function showPosition(position) {
+            display.innerHTML = "Longitude: " + position.coords.longitude + "<br>" +
+                                "Latitude: " + position.coords.latitude;
+        }
+    
+        function showError(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    display.innerHTML = "Permission denied, Geolocation request blocked.";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    display.innerHTML = "Location information is unavailable.";
+                    break;
+                case error.TIMEOUT:
+                    display.innerHTML = "The request to get user location timed out.";
+                    break;
+                case error.UNKNOWN_ERROR:
+                    display.innerHTML = "An unknown error occurred.";
+                    break;
+            }
+        }
+    
+        getLocation();
+    </script>
+
         <div style="background-color: white;box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);display:grid;grid-template-columns: 1rem 1rem 1rem 1rem; position:fixed; margin-bottom: .5%; margin-top: 80%;border-radius: 5%;">
             <img src="https://i.postimg.cc/QtZVxCxw/icons8-search-in-list-50.png" class="dockedImage">
             <img src="https://i.postimg.cc/SxyxP31Z/icons8-home-page-50.png" class="dockedImage">
