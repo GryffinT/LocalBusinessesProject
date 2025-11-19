@@ -9,8 +9,8 @@
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-    <section style="display:flex; justify-content:center; align-content: center;">
-        <div style="text-align:center;background-color:white;border-radius:5%;width:20%;height:70%; padding:1% 1% 1% 1%;">
+    <section style="display:flex; justify-content:center; align-content: center;flex-direction:column;height: 70%: width:30%;">
+        <div style="text-align:center;background-color:white;border-radius:5%; padding:1% 1% 1% 1%;">
             <h1>Login</h1>
             <hr style="height:2px; width:60%;background-color:black;border: none;">
             <h3>Location Status: <span id="location"></span></h3>
@@ -20,7 +20,7 @@
                 <br>
                 <input id="username" value="username" name="username" style="border: 2px solid rgb(60,179,113);" required >
                 <label for="username">Username</label><br>
-                <button type="submit">Login/Signup</button>
+                <button type="submit" style="margin-top:3%;">Login/Signup</button>
             </form>
         </div>
     </section>
