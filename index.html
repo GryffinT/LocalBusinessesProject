@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" style="background-color: rgb(219, 219, 219); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; height: 100%; min-height: 100vh;">
+<html lang="en" style="background-color: rgb(219, 219, 219); font-family:monospace; height: 100%; min-height: 100vh;">
 <head>
     <meta charset="utf-8">
     <title>Local Business App</title>
@@ -23,58 +23,62 @@
     </style>
 </head>
 <body>
-    <div class="card-container">
-        <div class="card-header">
-            <h1>Login</h1>
-            <hr class="card-divider">
-            <h3>Location Status: <span id="location"></span></h3>
-        </div>
-        <form class="card-form" autocomplete="off" onsubmit="return false;">
-            <input id="password" type="password" name="password" placeholder="Password" required>
-            <input id="username" type="text" name="username" placeholder="Username" required>
-            <button type="submit">Login/Signup</button>
-        </form>
-    </div>
-    <div class="docked-bar">
-        <img src="https://i.postimg.cc/wTgd3Ywp/icons8-menu-rounded-50.png" class="dockedImage" alt="Menu">
-        <img src="https://i.postimg.cc/QtZVxCxw/icons8-search-in-list-50.png" class="dockedImage" alt="Search">
-        <img src="https://i.postimg.cc/SxyxP31Z/icons8-home-page-50.png" class="dockedImage" alt="Home">
-        <img src="https://i.postimg.cc/bNPyG4Pb/icons8-gear-50.png" class="dockedImage" alt="Settings">
-    </div>
-    <script>
-        const display = document.getElementById("location");
-
-        function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(showPosition, showError);
-            } else {
-                display.innerHTML = "Error: Current browser does not support geolocation.";
-            }
-        }
-
-        function showPosition(position) {
-            display.innerHTML = "Longitude: " + position.coords.longitude + "<br>" +
-                                "Latitude: " + position.coords.latitude;
-        }
-
-        function showError(error) {
-            switch(error.code) {
-                case error.PERMISSION_DENIED:
-                    display.innerHTML = "Permission denied, Geolocation request blocked.";
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    display.innerHTML = "Location information is unavailable.";
-                    break;
-                case error.TIMEOUT:
-                    display.innerHTML = "The request to get user location timed out.";
-                    break;
-                case error.UNKNOWN_ERROR:
-                    display.innerHTML = "An unknown error occurred.";
-                    break;
-            }
-        }
-
-        getLocation();
-    </script>
+    <div class="card-container" style="align-items: flex-start; padding: 3%; height: 80%;">
+    <h1 style="align-self: flex-start;margin:0;margin-bottom: 2%;">Welcome Back</h1>
+    <h2 style="color: rgba(0, 0, 0, 0.5); width: 90%;align-self: flex-start; margin-top: 0;">Sign in to your account to continue.</h2>
+    <form class="card-container"
+        style="
+            background-color: rgba(255, 255, 255, 0.53);
+            font-family: monospace;
+            width: 100%;
+            height: 50%;
+            padding: 1%;
+            border-radius: 2.5%;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.25);
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        ">
+        <label for="email" style="font-size: 1.2em; margin-bottom: 10px; color: rgb(0, 0, 0);margin-top: 5%; margin-left: 5%;">Email Address</label>
+        <input type="text" 
+            placeholder="you@example.com" 
+            style="
+                margin-left: 5%;
+                width: 90%;
+                height: 10%;
+                padding: 10px;
+                margin-bottom: 20px;
+                font-size: 1.2em;
+                border-radius: 5px;
+                border: 1px solid rgba(0,0,0,0.3);
+                box-sizing: border-box;
+            " required>
+        <label for="password" style="font-size: 1.2em; margin-bottom: 10px; color: rgba(0, 0, 0);margin-left: 5%;">Password</label>
+        <input type="password" 
+            placeholder="Enter your password"
+            style="
+                margin-left: 5%;
+                width: 90%;
+                height: 10%;
+                padding: 10px;
+                margin-bottom: 20px;
+                font-size: 1.2em;
+                border-radius: 5px;
+                border: 1px solid rgba(0,0,0,0.3);
+                box-sizing: border-box;
+            " required>
+            <br>
+            <p style="width: 90%; align-self: center;font-size: 1.5rem;">I agree to use this app responsibly and respecfully. And will not hinder the operations or experiences of other users or businesses featured on this app.</p>
+            <input type="checkbox" style="width: auto; height: auto; align-self: center; margin-bottom: 2%;align-self: flex-start; margin-left: 5%;" required>
+    </form>
+    <hr style="margin-top: 5%; background-color: rgba(0, 0, 0, 0.5); width: 100%;">
+    <br>
+    <button class="confirm" style="width: 100%;">
+        Sign In
+    </button>
+    <p style="color: rgba(0, 0, 0, 0.5);font-size: 1.5rem;align-self: center;">Dont have an account? <a href="..." style="text-decoration: none;">Sign Up</a></p>
+</div>
 </body>
+<button onclick="window.location='location.html'">Next</button>
 </html>
