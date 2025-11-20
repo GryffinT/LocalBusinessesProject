@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" style="background-color: rgb(219, 219, 219); font-family:monospace; min-height: 100vh;">
+
+<html lang="en" style="background-color: rgb(219, 219, 219); font-family:monospace; height: 100%; min-height: 100vh;">
     <head>
         <meta charset="utf-8">
         <title>Location Status</title>
@@ -8,7 +9,7 @@
         <link rel="stylesheet" href="styles.css">
         <style>
             html, body {
-                min-height: 100vh;
+                height: 100%;
                 margin: 0;
                 padding: 0;
             }
@@ -19,55 +20,23 @@
                 justify-content: center;
                 align-items: center;
                 box-sizing: border-box;
-                overflow-y: auto; /* allow scroll if content overflows */
-            }
-            .card-container {
-                display: flex;
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 3%;
-                box-sizing: border-box;
-                width: 100%;
-                max-width: 450px;
-                background: none;
-            }
-            .card {
-                background-color: rgba(255, 255, 255, 0.534);
-                font-family: monospace;
-                width: 100%;
-                padding: 20px;
-                /* height: 50%; REMOVED! */
-                border-radius: 2.5%;
-                box-shadow: inset 0 0 10px rgba(0,0,0,0.25);
-                align-items: flex-start;
-                box-sizing: border-box;
-            }
-            .button-bar {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                width: 100%;
-                gap: 10px;
-                margin-top: 20px;
-                /* Ensure always at the bottom of card-container on taller screens */
-            }
-            @media (max-width: 600px) {
-                .card-container {
-                    padding: 1%;
-                }
-                .card {
-                    padding: 10px;
-                }
-                .button-bar {
-                    gap: 4px;
-                }
             }
         </style>
     </head>
     <body>
-        <div class="card-container">
+        <div class="card-container" style="align-items: flex-start; padding: 3%; height: 80%;">
             <h1 style="align-self: flex-start;margin:0;margin-bottom: 2%;">Location confirmation</h1>
             <h2 style="color: rgba(0, 0, 0, 0.5); width: 90%;align-self: flex-start; margin-top: 0;">We need to verify your current location.</h2>
-            <div class="card">
+            <div class="card-container"
+                style="background-color: rgba(255, 255, 255, 0.534);
+                        font-family: monospace;
+                        width: 100%;
+                        padding: 20px;
+                        height: 50%;
+                        border-radius: 2.5%;
+                        box-shadow: inset 0 0 10px rgba(0,0,0,0.25);
+                        align-items: flex-start;
+            ">
                 <h3 style="margin: 0; color: rgba(0, 0, 0, 0.5);margin-top: 2%;">Coordinates</h3>
                 <h1 style="font-weight: bold;"><span id="longitude"></span>, <span id="latitude"></span></h1>
                 <br>
@@ -79,10 +48,11 @@
             </div>
             <hr style="margin-top: 5%; background-color: rgba(0, 0, 0, 0.5); width: 100%;">
             <h2 style="color: rgba(0, 0, 0, 0.5);">Is this information correct?</h2>
-            <div class="button-bar">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; width: 100%; gap: 10px;">
                 <button onclick="getLocation()" class="retry">
                     No, Retry
                 </button>
+
                 <button class="confirm">
                     Yes, Confirm
                 </button>
@@ -143,5 +113,6 @@
 
             getLocation();
         </script>
+
     </body>
 </html>
