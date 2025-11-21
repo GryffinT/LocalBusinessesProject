@@ -24,36 +24,26 @@
         </style>
     </head>
     <body>
-        <div class="card-container" style="align-items: flex-start; padding: 3%; height: 80%; box-sizing:border-box;">
-            <h1 style="align-self: flex-start;margin:0;margin-bottom: 2%;">Location confirmation</h1>
-            <h2 style="color: rgba(0, 0, 0, 0.5); width: 90%;align-self: flex-start; margin-top: 0;">We need to verify your current location.</h2>
-            <div class="card-container"
-                style="background-color: rgba(255, 255, 255, 0.534);
-                        font-family: monospace;
-                        width: 100%;
-                        padding: 20px;
-                        height: 50%;
-                        border-radius: 2.5%;
-                        box-shadow: inset 0 0 10px rgba(0,0,0,0.25);
-                        align-items: flex-start;
-            ">
-                <h3 style="margin: 0; color: rgba(0, 0, 0, 0.5);margin-top: 2%;">Coordinates</h3>
-                <h1 style="font-weight: bold;"><span id="longitude"></span>, <span id="latitude"></span></h1>
-                <br>
-                <h3 style="margin-bottom: 0; color: rgba(0, 0, 0, 0.5);">Location</h3>
-                <h1 style="margin-bottom: 0;"><span id="city">City</span>, <span id="state">State</span></h1>
-                <h3 style="color: rgba(0, 0, 0, 0.5);" id="country">Country</h3>
-                <h3 style="color: rgba(0, 0, 0, 0.5); margin-top: 7%;">Accuracy</h3>
-                <h1 style="margin: 0;">20 meters</h1>
+        <div class="card-container" style="align-items: flex-start; padding: 1rem; box-sizing:border-box;">
+            <h1 style="align-self: flex-start;margin:0;margin-bottom: 0.5rem">Location confirmation</h1>
+            <h2 style="color: rgba(0, 0, 0, 0.6); align-self: stretch; margin-top: 0; font-weight:normal; font-size:1rem;">We need to verify your current location.</h2>
+            <div class="card-inset" style="width:93%;">
+                <h3 style="margin: 0; color: rgba(0, 0, 0, 0.6);">Coordinates</h3>
+                <h2 style="font-weight: bold; margin:0.25rem 0;margin-bottom: 1rem;"><span id="latitude">—</span>, <span id="longitude">—</span></h2>
+                <h3 style="margin:0; color: rgba(0, 0, 0, 0.6);">Location</h3>
+                <h2 style="margin:0.25rem 0;"><span id="city">City</span>, <span id="state">State</span></h2>
+                <h3 style="color: rgba(0, 0, 0, 0.6);margin-top: 0;" id="country">Country</h3>
+                <h3 style="color: rgba(0, 0, 0, 0.6); margin-top: 0.75rem;margin-bottom: 0px;">Accuracy</h3>
+                <p id="accuracy" style="margin:0px;">—</p>
             </div>
             <hr style="margin-top: 5%; background-color: rgba(0, 0, 0, 0.5); width: 100%;">
             <h2 style="color: rgba(0, 0, 0, 0.5);">Is this information correct?</h2>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; width: 100%; gap: 10px;">
-                <button onclick="getLocation()" class="retry">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; width: 100%; gap: 10px; margin-top:0.5rem;">
+                <button id="retryBtn" class="retry">
                     No, Retry
                 </button>
 
-                <button class="confirm">
+                <button id="confirmBtn" class="confirm">
                     Yes, Confirm
                 </button>
             </div>
@@ -64,53 +54,85 @@
             const cityDisplay = document.getElementById("city");
             const stateDisplay = document.getElementById("state");
             const countryDisplay = document.getElementById("country");
+            const accuracyDisplay = document.getElementById('accuracy');
+
+            const retryBtn = document.getElementById('retryBtn');
+            const confirmBtn = document.getElementById('confirmBtn');
 
             function getLocation() {
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(showPosition, showError, {
-                        enableHighAccuracy: true
+                        enableHighAccuracy: true,
+                        maximumAge: 0,
+                        timeout: 10000
                     });
                 } else {
-                    longitudeDisplay.innerHTML = "Browser does not support geolocation.";
+                    latitudeDisplay.textContent = "Browser does not support geolocation.";
                 }
             }
 
             function showPosition(position) {
                 const lat = position.coords.latitude;
                 const lon = position.coords.longitude;
+                const acc = position.coords.accuracy;
 
-                longitudeDisplay.innerHTML = lon;
-                latitudeDisplay.innerHTML = lat;
+                latitudeDisplay.textContent = lat.toFixed(6);
+                longitudeDisplay.textContent = lon.toFixed(6);
+                accuracyDisplay.textContent = `${Math.round(acc)} meters`;
 
-                fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&zoom=18&addressdetails=1`)
+                // Reverse geocode using Nominatim
+                fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&zoom=12&addressdetails=1`)
                     .then(response => response.json())
                     .then(data => {
                         const address = data.address || {};
-
-                        cityDisplay.innerHTML = 
-                            address.city || address.town || address.village || "Unknown";
-
-                        stateDisplay.innerHTML =
-                            address.state || address.region || "Unknown";
-                        
-                        countryDisplay.innerHTML = 
-                            address.country || "Unknown";
+                        cityDisplay.textContent = address.city || address.town || address.village || address.county || 'Unknown';
+                        stateDisplay.textContent = address.state || address.region || 'Unknown';
+                        countryDisplay.textContent = address.country || 'Unknown';
                     })
                     .catch(error => {
-                        console.error("Reverse geocoding error:", error);
+                        console.error('Reverse geocoding error:', error);
                     });
             }
 
             function showError(error) {
                 const msg = {
-                    1: "Permission denied.",
-                    2: "Position unavailable.",
-                    3: "Request timed out."
-                }[error.code] || "Unknown error.";
+                    1: 'Permission denied.',
+                    2: 'Position unavailable.',
+                    3: 'Request timed out.'
+                }[error.code] || 'Unknown error.';
 
                 console.error(msg);
+                alert('Location error: ' + msg);
             }
 
+            retryBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                getLocation();
+            });
+
+            confirmBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                // store values locally and continue
+                const lat = document.getElementById('latitude').textContent;
+                const lon = document.getElementById('longitude').textContent;
+                const city = document.getElementById('city').textContent;
+                const state = document.getElementById('state').textContent;
+
+                if (!lat || !lon || lat === '—') {
+                    alert('No location available yet. Please retry.');
+                    return;
+                }
+
+                localStorage.setItem('user_latitude', lat);
+                localStorage.setItem('user_longitude', lon);
+                localStorage.setItem('user_city', city);
+                localStorage.setItem('user_state', state);
+
+                // proceed to a placeholder next page
+                window.location.href = 'next.html';
+            });
+
+            // run once on load
             getLocation();
         </script>
 

@@ -1,69 +1,72 @@
 .card-container {
     background-color: white;
-    border-radius: 3%;
+    border-radius: 1rem;
     box-sizing: border-box;
-    width: 70vw;
-    max-width: 700px;
-    height: 75vh;
+    width: min(92vw, 420px);
+    aspect-ratio: 3 / 4; 
+    max-height: 92vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     justify-content: flex-start;
     overflow: hidden;
-    box-shadow: 0 2px 24px rgba(0,0,0,0.10);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+    padding: 3rem;
 }
 .card-header {
     width: 100%;
-    text-align: center;
+    text-align: left;
+    padding: 0.25rem 0.25rem 0.75rem 0.25rem;
 }
 .card-divider {
     height: 2px;
-    width: 60%;
-    background-color: black;
+    width: 100%;
+    background-color: rgba(0,0,0,0.08);
     border: none;
-    margin: 0 auto;
+    margin: 0;
 }
-.card-form {
-    flex: .5 0 auto;
-    width: 90%;
+.card-inset {
+    background: rgba(0,0,0,0.06);
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin: 0.25rem 0 0.75rem 0;
+    height: ;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    gap: 0.5rem;
     overflow: auto;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.08);
 }
-.card-form input[type="password"],
-.card-form input[type="text"] {
-    width: 88%;
-    max-width: 340px;
-    margin-bottom: 10px;
-    border: 2px solid rgb(60,179,113);
-    border-radius: 4px;
-    padding: 6px 8px;
-    font-size: 1.02em;
-    box-sizing: border-box;
-    background: #fafafa;
+.card-inset .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
 }
-.card-form label {
-    align-self: flex-start;
-    margin-left: 6%;
-    font-size: 0.98em;
-    color: #333;
-}
-.card-form button {
-    margin-top: 22px;
-    min-width: 100px;
-    padding: 6px 16px;
+.card-inset input[type="password"],
+.card-inset input[type="text"] {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 6px;
+    border: 1px solid rgba(0,0,0,0.25);
     border-radius: 6px;
-    border: none;
-    background: rgb(60,179,113);
-    color: white;
-    font-weight: bold;
-    font-size: 1em;
-    cursor: pointer;
+    padding: 10px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    background: #fff;
 }
-.card-form button:hover {
-    background: rgb(50,150,90);
+.card-inset label {
+    font-size: 0.95rem;
+    color: #222;
+}
+.card-inset .actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+.card-inset .agreement {
+    font-size: 0.8rem;
+    color: rgba(0,0,0,0.6);
 }
 #location {
     font-weight: bold;
@@ -72,39 +75,45 @@
 
 @media (max-width: 600px) {
     .card-container {
-        width: 95vw;
-        min-width: unset;
-        height: 92vh;
-        min-height: 280px;
-        border-radius: 4vw;
+        width: 94vw;
+        aspect-ratio: auto;
+        height: auto;
+        max-height: 92vh;
+        border-radius: 1rem;
+        padding: 0.75rem;
     }
-    .card-header {
-        font-size: 1.25em;
-    }
-    .card-form input[type="password"],
-    .card-form input[type="text"] {
-        width: 98%;
+    .card-inset input[type="password"],
+    .card-inset input[type="text"] {
+        width: 100%;
     }
 }
 
 .docked-bar {
     background-color: white;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.12);
-    display: grid;
-    grid-template-columns: repeat(4, 2rem);
     position: fixed;
     left: 50%;
     bottom: 2%;
     transform: translateX(-50%);
-    padding: 0.25rem 1.1rem;
-    border-radius: 1.25rem;
-    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     gap: 1.2rem;
+    padding: 0.5rem 1.2rem;
+    border-radius: 1.25rem;
+    width: fit-content;
+    height: auto;
+
+    z-index: 10;
 }
+
 .dockedImage {
-    width: 32px;
-    height: 32px;
+    width: 3rem;
+    height: 2.2rem;
+    object-fit: contain;
+    cursor: pointer;
 }
+
 
 .retry {
     font-family:monospace;
@@ -145,4 +154,56 @@
 
 .confirm:active {
     background-color: rgba(0, 0, 0, 0.5)
+}
+
+.slider {
+  width: 100%;
+  -webkit-appearance: none;
+  height: 8px;
+  border-radius: 5px;
+  background: #ddd;
+  outline: none;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #4CAF50;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #4CAF50;
+  cursor: pointer;
+}
+
+.resultItem {
+    padding:1rem;
+    background-color:white;
+    color:black;
+    border-radius:4px;
+    font-size:1.2rem;
+    font-weight:bold;
+    padding-left:1rem;
+    margin-bottom:0.5rem;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    transform-origin: top;
+    transition: transform .2s ease, box-shadow .2s ease,background-color .2s ease;
+}
+
+.resultItem:hover {
+    transform: scale(1.01);
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+}
+
+.resultItem:active {
+    transform: scale(0.99);
+    background-color: rgba(255, 255, 255, 0.664);
 }
