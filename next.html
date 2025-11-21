@@ -169,12 +169,13 @@
                             cuisineTypes = cuisineTypes.map(c => c.split('_') .join(' '));
                             cuisineTypes = cuisineTypes.map(c => c.indexOf(' ') >= 0 ? c.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : c);
                             cuisineType = cuisineTypes.join(', ');
+                            let open = element.tags['opening_hours'];
 
                             div.classList.add("resultItem");
                             div.innerHTML = `${name}<br>Type: ${itemTypeName || 'Other'}<br>Cuisine: ${cuisineType}`;
                             resultsContainer.appendChild(div);
                             div.classList.add("resultItem");
-                            div.innerHTML = `${name}<br>Type: ${itemTypeName || 'Other'}<br>Cuisine: ${cuisineType}<br>Hours: ${element.tags[opening_hours]}`;
+                            div.innerHTML = `${name}<br>Type: ${itemTypeName || 'Other'}<br>Cuisine: ${cuisineType}<br>Hours: ${open}`;
                             resultsContainer.appendChild(div);
                         });
 
