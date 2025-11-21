@@ -174,7 +174,7 @@
                             div.innerHTML = `${name}<br>Type: ${itemTypeName || 'Other'}<br>Cuisine: ${cuisineType}`;
                             resultsContainer.appendChild(div);
                             div.classList.add("resultItem");
-                            div.innerHTML = `${name}<br>Type: ${itemTypeName || 'Other'}<br>Cuisine: ${cuisineType}`;
+                            div.innerHTML = `${name}<br>Type: ${itemTypeName || 'Other'}<br>Cuisine: ${cuisineType}<br>Hours: ${element.tags[opening_hours]}`;
                             resultsContainer.appendChild(div);
                         });
 
