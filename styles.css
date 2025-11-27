@@ -207,3 +207,57 @@
     transform: scale(0.99);
     background-color: rgba(255, 255, 255, 0.664);
 }
+
+.notification {
+    border-radius: 12px; 
+    background-color: red; 
+    padding: 5px 15px; 
+    font-size: x-large;
+    font-weight: bold;
+    position:fixed; 
+    right: 1rem; 
+    bottom: 1rem;
+    color:white;
+    transition: opacity 1s ease;
+}
+
+.notification.fade-out {
+    opacity: 0;
+}
+
+.search {
+    width: 100%;
+    font-size: 1rem;
+    padding: 0.5rem;
+    border-radius: 6px;
+    background-color: white;
+    border: 1px solid rgba(0,0,0,0.2);
+    height: 100%;
+    font-family: monospace;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.search:hover {
+    transform: scale(1.05);
+}
+
+.search:active {
+    background-color: rgba(0, 0, 0, 0.5)
+}
+
+.cats {
+    width: 100%; 
+    font-size: 1rem;
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid rgba(0,0,0,0.2);
+    height: 100%;
+    font-family: monospace;
+    margin-left: 2%;
+    transition: transform 0.2s;
+}
+
+.cats:focus {
+    transform: scale(1.05);
+}

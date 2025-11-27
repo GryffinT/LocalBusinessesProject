@@ -22,18 +22,23 @@
     ">
 
         <div class="card-container" style="left: 0px;align-self: center;height: 100%; margin-left: 0px;">
-            <h1 style="margin:0 0 0.5rem 0;">Info</h1>
-            <p style="color: rgba(0,0,0,0.6);">Placeholder info</p>
-            <div style="margin-top:1rem;">
-                <button class="confirm" onclick="showStored()">Show stored location</button>
+            <div>
+                <!-- <button class="confirm" onclick="showStored()">Show stored location</button> -->
                 <button class="retry" onclick="window.location='index.html'" style="margin-left:8px;">Sign Out</button>
             </div>
-            <pre id="stored" style="margin-top:1rem;background:rgba(0,0,0,0.04); padding:1rem; border-radius:6px; overflow:auto; max-height:40vh;"></pre>
+            <hr style="height: .2%; background-color: rgb(0, 0, 0); width: 100%;margin-top: 5%;">
+            <div class="card-inset" style="height: 3%;overflow-y: hidden;">
+                <pre id="shop" style="font-size: x-large; margin-top: 0px;"></pre>
+            </div>
+            <div class="card-inset" style="height: 80%;">
+            </div>
         </div>
         <div class="card-container" style="width: 100%; height: 100%; padding: 3%;">
             <div class="card-inset" style="height: 5%; display: grid; grid-template-columns: 1fr 1fr 1fr auto; overflow-y: hidden;">
-                <input type="text" placeholder="Search..." style="width: 100%; font-size: 1rem; border: 1px solid rgba(0,0,0,0.2); border-radius: 6px; align-self: flex-start;font-family: monospace;">
-                <select id="selection" style="width: 100%; font-size: 1rem; padding: 0.5rem; border-radius: 6px; border: 1px solid rgba(0,0,0,0.2); height: 85%;font-family: monospace;">
+                <button onclick="fetchLocalBusinesses()" class="search">
+                    Search
+                </button>
+                <select id="selection" class="cats">
                 <option>All Categories</option>
                 <!-- Food & Drink -->
                 <option>Restaurant</option>
@@ -68,9 +73,6 @@
                 <!-- Favorites / Custom -->
                 <option>Favorites</option>
                 </select>
-                <button onclick="fetchLocalBusinesses()" style="font-size: 1rem; cursor: pointer; align-self: center; padding: 0; background-color: white; font-family: monospace; height: 80%; align-self: center;">
-                    Search
-                </button>
 
                 <script>
                 async function fetchLocalBusinesses() {
@@ -110,27 +112,15 @@
 
                     if (selection !== 'All Categories' && selection !== 'Favorites') {
                         const cat = categoryMap[selection];
-                        if (cat) {
-                            overpassQuery += `node["${cat.key}"="${cat.value}"](around:5000,${lat},${lon});`;
-                        }
+                        if (cat) overpassQuery += `node["${cat.key}"="${cat.value}"](around:5000,${lat},${lon});`;
                     } else {
-                        businessAmenities.forEach(a => {
-                            overpassQuery += `node["amenity"="${a}"](around:5000,${lat},${lon});`;
-                        });
-                        businessShops.forEach(s => {
-                            overpassQuery += `node["shop"="${s}"](around:5000,${lat},${lon});`;
-                        });
-                        businessTourism.forEach(t => {
-                            overpassQuery += `node["tourism"="${t}"](around:5000,${lat},${lon});`;
-                        });
-                        businessLeisure.forEach(l => {
-                            overpassQuery += `node["leisure"="${l}"](around:5000,${lat},${lon});`;
-                        });
+                        businessAmenities.forEach(a => overpassQuery += `node["amenity"="${a}"](around:5000,${lat},${lon});`);
+                        businessShops.forEach(s => overpassQuery += `node["shop"="${s}"](around:5000,${lat},${lon});`);
+                        businessTourism.forEach(t => overpassQuery += `node["tourism"="${t}"](around:5000,${lat},${lon});`);
+                        businessLeisure.forEach(l => overpassQuery += `node["leisure"="${l}"](around:5000,${lat},${lon});`);
                     }
 
                     overpassQuery += ');out center;';
-
-                    console.log("Overpass query:", overpassQuery);
 
                     try {
                         const response = await fetch('https://overpass-api.de/api/interpreter', {
@@ -166,15 +156,51 @@
 
                             let cuisineTypes = cuisineType.split(';').map(c => c.trim()).filter(c => c.length > 0);
                             cuisineTypes = cuisineTypes.map(c => c.charAt(0).toUpperCase() + c.slice(1));
-                            cuisineTypes = cuisineTypes.map(c => c.split('_') .join(' '));
+                            cuisineTypes = cuisineTypes.map(c => c.split('_').join(' '));
                             cuisineTypes = cuisineTypes.map(c => c.indexOf(' ') >= 0 ? c.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : c);
                             cuisineType = cuisineTypes.join(', ');
-                            let open = element.tags['opening_hours'];
-                            let accessibility = element.tags['wheelchair'];
-                            let site = element.tags['website:orders'];
+
+                            let open = element.tags['opening_hours'] || 'N/A';
+                            let accessibility = element.tags['wheelchair'] || 'N/A';
+                            let website = element.tags['website'] || element.tags['contact:website'] || 'N/A';
+                            let image = element.tags['image'] || '';
 
                             div.classList.add("resultItem");
-                            div.innerHTML = `${name}<br>Type: ${itemTypeName || 'Other'}<br>Cuisine: ${cuisineType}<br>Hours: ${open}<br>Accessibility: ${accessibility}<br>Website: ${site}`;
+                            div.style.cursor = "pointer";
+                            div.innerHTML = `${name}<br>Type: ${itemTypeName || 'Other'}<br>Cuisine: ${cuisineType}<br>Hours: ${open}<br>Accessibility: ${accessibility}<br>Website: ${website}`;
+
+                            // store element data for full card
+                            div.dataset.lat = element.lat;
+                            div.dataset.lon = element.lon;
+                            div.dataset.name = name;
+                            div.dataset.type = itemTypeName || 'Other';
+                            div.dataset.cuisine = cuisineType;
+                            div.dataset.hours = open;
+                            div.dataset.accessibility = accessibility;
+                            div.dataset.website = website;
+                            div.dataset.image = image;
+
+                            div.addEventListener('click', () => {
+                                // populate #shop
+                                const shopElem = document.getElementById('shop');
+                                if (shopElem) shopElem.textContent = div.dataset.name;
+
+                                // populate #image
+                                const imageElem = document.getElementById('image');
+                                if (imageElem) {
+                                    if (div.dataset.image) {
+                                        imageElem.src = div.dataset.image;
+                                        imageElem.style.display = 'block';
+                                    } else {
+                                        imageElem.style.display = 'none';
+                                    }
+                                }
+
+                                // highlight selected
+                                document.querySelectorAll('.resultItem').forEach(item => item.style.backgroundColor = '');
+                                div.style.backgroundColor = '#d0f0c0';
+                            });
+
                             resultsContainer.appendChild(div);
                         });
 
@@ -186,6 +212,8 @@
 
                 document.querySelector("button[onclick='fetchLocalBusinesses()']").addEventListener('click', fetchLocalBusinesses);
                 </script>
+
+
 
 
             </div>

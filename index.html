@@ -1,106 +1,164 @@
 <!DOCTYPE html>
+
 <html lang="en" style="background-color: rgb(219, 219, 219); font-family:monospace; height: 100%; min-height: 100vh;">
-<head>
-    <meta charset="utf-8">
-    <title>Local Business App</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            min-height: 100vh;
-            min-width: 100vw;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-sizing: border-box;
-        }
-    </style>
-</head>
-<body>
-    <script>
-        
-    </script>
-    <div class="card-container">
-        <h1 style="margin:0 0 0.5rem 0;">Welcome Back</h1>
-        <h2 style="color: rgba(0, 0, 0, 0.6); margin:0 0 0.5rem 0; font-weight:normal; font-size:1rem;">Sign in to your account to continue.</h2>
+    <head>
+        <meta charset="utf-8">
+        <title>Local Business App</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="styles.css">
+        <style>
+            html, body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                min-height: 100vh;
+                min-width: 100vw;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                box-sizing: border-box;
+            }
+            .form-toggle {
+                text-align: center;
+                margin-top: 1rem;
+            }
+            .form-toggle a {
+                cursor: pointer;
+                text-decoration: none;
+                color: #007bff;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="card-container">
+            <h1 id="formTitle" style="margin:0 0 0.5rem 0;">Welcome Back</h1>
+            <h2 id="formSubtitle" style="color: rgba(0, 0, 0, 0.6); margin:0 0 0.5rem 0; font-weight:normal; font-size:1rem;">
+                Sign in to your account to continue.
+            </h2>
 
-        <form class="card-inset" novalidate style="margin-top: 10%; margin-bottom: 10%;">
-            <div class="field">
-                <label for="email">Email Address</label>
-                <input id="email" type="email" placeholder="you@example.com" style="height:2rem; border-radius:5px;" required>
+            <form id="authForm" class="card-inset" novalidate style="margin-top: 10%; margin-bottom: 10%;">
+                <div class="field">
+                    <label for="email">Email Address</label>
+                    <input id="email" type="email" placeholder="you@example.com" style="height:2rem; border-radius:5px;" required>
+                </div>
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input id="password" type="password" placeholder="Enter your password" required>
+                </div>
+                <div class="field" id="confirmPasswordField" style="display:none;">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input id="confirmPassword" type="password" placeholder="Confirm your password">
+                </div>
+                <div class="actions">
+                    <input id="agree" type="checkbox" required>
+                    <label for="agree" class="agreement">
+                        I agree to use this app responsibly and respectfully and will not hinder the operations or experiences of other users or businesses featured on this app.
+                    </label>
+                </div>
+            </form>
+
+            <hr class="card-divider" style="margin-bottom: 10%;">
+            <button id="authBtn" class="confirm" style="width:100%; margin-top:0.5rem;">Sign In</button>
+
+            <div class="form-toggle">
+                <p id="toggleText" style="color: rgba(0, 0, 0, 0.5); font-size: 0.95rem;">
+                    Don't have an account? <a id="toggleLink">Sign Up</a>
+                </p>
             </div>
-            <div class="field">
-                <label for="password">Password</label>
-                <input id="password" type="password" placeholder="Enter your password" required>
-            </div>
-            <div class="actions">
-                <input id="agree" type="checkbox" required>
-                <label for="agree" class="agreement">I agree to use this app responsibly and respectfully and will not hinder the operations or experiences of other users or businesses featured on this app.</label>
-            </div>
-        </form>
+        </div>
 
-        <hr class="card-divider" style="margin-bottom: 10%;">
-        <button id="signInBtn" class="confirm" style="width:100%; margin-top:0.5rem;">Sign In</button>
-        <p style="color: rgba(0, 0, 0, 0.5); font-size: 0.95rem; text-align:center; margin-top:0.75rem;">Don't have an account? <a href="#" style="text-decoration:none;">Sign Up</a></p>
-    </div>
-    <button onclick="window.location='location.html'" class="retry" style="position:fixed; right:1rem; bottom:1rem;">Next</button>
-    <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+        <h1 id="notif"></h1>
 
-        const SUPABASE_URL = '' // Supabase stuff to setup..
-        const SUPABASE_ANON_KEY = ''
+        <script type="module">
+            import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+            const SUPABASE_URL = "https://jxqpsdgppqpuzlaylhmx.supabase.co";
+            const SUPABASE_ANON_KEY = "sb_publishable_mHZz1EMda_IWSRHI4wBf9w_gtgrYC-T";
 
-        const signInBtn = document.getElementById('signInBtn')
+            const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        signInBtn.addEventListener('click', async (e) => {
-            e.preventDefault()
-            const email = document.getElementById('email').value.trim()
-            const password = document.getElementById('password').value
-            const agreed = document.getElementById('agree').checked
+            const authBtn = document.getElementById("authBtn");
+            const emailField = document.getElementById("email");
+            const passwordField = document.getElementById("password");
+            const confirmPasswordField = document.getElementById("confirmPassword");
+            const agreeCheck = document.getElementById("agree");
+            const notif = document.getElementById("notif");
 
-            if (!agreed) {
-                alert('You must agree to the terms to sign in.')
-                return
+            const formTitle = document.getElementById("formTitle");
+            const formSubtitle = document.getElementById("formSubtitle");
+            const confirmPasswordWrapper = document.getElementById("confirmPasswordField");
+
+            const toggleLink = document.getElementById("toggleLink");
+            const toggleText = document.getElementById("toggleText");
+
+            let isSignUp = false;
+
+            function showError(message) {
+                notif.classList.remove("fade-out");
+                void notif.offsetWidth;
+                notif.classList.add("notification");
+                notif.innerHTML = message;
+                setTimeout(() => notif.classList.add("fade-out"), 2000);
             }
 
-            if (!email || !password) {
-                alert('Please provide email and password.')
-                return
-            }
-
-            if (SUPABASE_URL.includes('REPLACE') || SUPABASE_ANON_KEY.includes('REPLACE')) {
-                alert('Supabase not configured. Please set SUPABASE_URL and SUPABASE_ANON_KEY in the script.')
-                return
-            }
-
-            try {
-                const { data, error } = await supabase.auth.signInWithPassword({ email, password })
-                if (error) {
-                    console.error('Sign-in error', error)
-                    alert('Sign in failed: ' + (error.message || 'Check credentials'))
-                    return
-                }
-
-                if (data && data.user) {
-                    localStorage.setItem('sb_user', JSON.stringify({ id: data.user.id, email: data.user.email }))
-                    localStorage.setItem('loggedIn', 'true')
-                    window.location.href = 'location.html'
+            toggleLink.addEventListener("click", () => {
+                isSignUp = !isSignUp;
+                if (isSignUp) {
+                    formTitle.textContent = "Create Account";
+                    formSubtitle.textContent = "Sign up to start using the app.";
+                    confirmPasswordWrapper.style.display = "block";
+                    authBtn.textContent = "Sign Up";
+                    toggleText.innerHTML = 'Already have an account? <a id="toggleLink">Sign In</a>';
                 } else {
-                    alert('Sign in failed: unknown response')
+                    formTitle.textContent = "Welcome Back";
+                    formSubtitle.textContent = "Sign in to your account to continue.";
+                    confirmPasswordWrapper.style.display = "none";
+                    authBtn.textContent = "Sign In";
+                    toggleText.innerHTML = 'Don\'t have an account? <a id="toggleLink">Sign Up</a>';
                 }
-            } catch (err) {
-                console.error(err)
-                alert('Sign in error. See console for details.')
-            }
-        })
-    </script>
-</body>
+
+                document.getElementById("toggleLink").addEventListener("click", () => toggleLink.click());
+            });
+
+            authBtn.addEventListener("click", async (e) => {
+                e.preventDefault();
+
+                const email = emailField.value.trim();
+                const password = passwordField.value;
+                const confirmPassword = confirmPasswordField.value;
+
+                if (!agreeCheck.checked) return showError("You must agree to the terms to continue.");
+                if (!email || !password) return showError("Email and password are required.");
+                if (isSignUp && password !== confirmPassword) return showError("Passwords do not match.");
+
+                try {
+                    if (isSignUp) {
+                        const { data, error } = await supabase.auth.signUp({ email, password });
+                        if (error) return showError(error.message);
+                        console.log("Signed up:", data.user.email);
+                        showError("Sign-up successful! Please check your email to confirm.");
+                    } else {
+                        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+                        if (error) return showError(error.message);
+                        console.log("Signed in:", data.user.email);
+                        window.location.href = "location.html";
+                    }
+                } catch (err) {
+                    console.error("Auth error:", err);
+                    showError("Unexpected error. Check console.");
+                }
+            });
+
+            (async () => {
+                const { data: { user } } = await supabase.auth.getUser();
+                if (user) {
+                    console.log("Session active, redirecting...");
+                    window.location.href = "location.html";
+                }
+            })();
+        </script>
+    </body>
 </html>
