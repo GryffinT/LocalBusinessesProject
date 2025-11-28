@@ -31,7 +31,6 @@
     border-radius: 0.75rem;
     padding: 1rem;
     margin: 0.25rem 0 0.75rem 0;
-    height: ;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -183,31 +182,6 @@
   cursor: pointer;
 }
 
-.resultItem {
-    padding:1rem;
-    background-color:white;
-    color:black;
-    border-radius:4px;
-    font-size:1.2rem;
-    font-weight:bold;
-    padding-left:1rem;
-    margin-bottom:0.5rem;
-    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-    transform-origin: top;
-    transition: transform .2s ease, box-shadow .2s ease,background-color .2s ease;
-}
-
-.resultItem:hover {
-    transform: scale(1.01);
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.12);
-    cursor: pointer;
-}
-
-.resultItem:active {
-    transform: scale(0.99);
-    background-color: rgba(255, 255, 255, 0.664);
-}
-
 .notification {
     border-radius: 12px; 
     background-color: red; 
@@ -260,4 +234,93 @@
 
 .cats:focus {
     transform: scale(1.05);
+}
+
+.fav {
+    position: relative;
+    overflow: hidden;
+    font-family: monospace;
+    padding: 10px;
+    font-size: 1.2em;
+    border-radius: 10px;
+    border: 1px solid black;
+    background-color: gold;
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.fav::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+        120deg,
+        transparent 0%,
+        rgba(255,255,255,0.4) 50%,
+        transparent 100%
+    );
+    transform: skewX(-20deg);
+    animation: shineMove 2.5s infinite;
+    pointer-events: none;
+}
+
+@keyframes shineMove {
+    0% { left: -150%; }
+    60% { left: 150%; }
+    100% { left: 150%; }
+}
+
+.fav:hover {
+    transform: scale(1.05);
+}
+
+.fav:active {
+    background-color: rgb(218, 185, 0);
+}
+
+.resultItem {
+    display: grid;
+    grid-template-columns: 35% 50%;
+    height: 500px;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    background-color: white;
+    border-radius: 15px;
+    transition: transform .2s ease;
+}
+
+.resultItem:hover{
+    transform: scale(1.01);
+}
+
+.rleft {
+    background-color: black;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+.rright {
+    display: grid;
+    grid-template-rows: repeat(5, minmax(40px, auto)) 1fr; /* 5 rows, min 40px, auto expand + deals row */
+    gap: 0.25rem;
+}
+
+.deals {
+    display: grid;
+    grid-auto-rows: auto; /* infinite rows */
+    overflow-y: auto; /* scroll if content is too big */
+}
+
+.innerRight {
+    margin: 5px;
+}
+
+.innerRightLocation {
+    margin: 5px;
+    display: grid;
+    grid-template-columns: 25px auto;
 }

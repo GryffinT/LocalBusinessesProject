@@ -27,10 +27,15 @@
                 <button class="retry" onclick="window.location='index.html'" style="margin-left:8px;">Sign Out</button>
             </div>
             <hr style="height: .2%; background-color: rgb(0, 0, 0); width: 100%;margin-top: 5%;">
-            <div class="card-inset" style="height: 3%;overflow-y: hidden;">
-                <pre id="shop" style="font-size: x-large; margin-top: 0px;"></pre>
+            <div class="card-inset" style="height: 8%;overflow: hidden; display: grid;grid-template-columns: auto 1fr;justify-content: center;align-items: center; padding: 2%;">
+                <a id="shop" style="font-size: large; margin:0px"></a><pre id="specs" style="font-size:small; margin:0px"></pre>
             </div>
-            <div class="card-inset" style="height: 80%;">
+            <div class="card-inset" style="height: 80%; display: grid;grid-template-columns: auto; grid-template-rows: 70% 28%;">
+                <h1>Hello</h1>
+                <div class="card-container" style="height: 100%;width: 100%; padding: 5%;align-items: center; display: grid;grid-template-columns: 100%; grid-template-rows: auto auto;">
+                    <button class="retry" style="width: 100%;">Leave a review.</button>
+                    <button class="fav" style="width: 100%; margin-top: 10px;">Favorite</button>
+                </div>
             </div>
         </div>
         <div class="card-container" style="width: 100%; height: 100%; padding: 3%;">
@@ -141,6 +146,8 @@
                             const name = element.tags?.name || 'Unnamed';
                             const type = element.tags?.amenity || element.tags?.shop || element.tags?.tourism || element.tags?.leisure || 'Unknown type';
                             const div = document.createElement('div');
+                            const left = document.createElement('div');
+                            const right = document.createElement('div');
 
                             let cuisineType = "N/A";
 
@@ -158,23 +165,54 @@
                             cuisineTypes = cuisineTypes.map(c => c.charAt(0).toUpperCase() + c.slice(1));
                             cuisineTypes = cuisineTypes.map(c => c.split('_').join(' '));
                             cuisineTypes = cuisineTypes.map(c => c.indexOf(' ') >= 0 ? c.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : c);
-                            cuisineType = cuisineTypes.join(', ');
+                            cuisineType = cuisineTypes.join(' • ');
 
                             let open = element.tags['opening_hours'] || 'N/A';
                             let accessibility = element.tags['wheelchair'] || 'N/A';
                             let website = element.tags['website'] || element.tags['contact:website'] || 'N/A';
                             let image = element.tags['image'] || '';
-
                             div.classList.add("resultItem");
                             div.style.cursor = "pointer";
-                            div.innerHTML = `${name}<br>Type: ${itemTypeName || 'Other'}<br>Cuisine: ${cuisineType}<br>Hours: ${open}<br>Accessibility: ${accessibility}<br>Website: ${website}`;
+                            left.classList.add("rleft");
+                            right.classList.add("rright");
+                            div.appendChild(left);
+                            div.appendChild(right);
 
+                            const text = document.createElement('h1');
+                            text.classList.add("innerRight");
+                            text.innerHTML = name;
+                            right.appendChild(text);
+
+                            const businessType = document.createElement('h3');
+                            businessType.classList.add("innerRight");
+                            businessType.innerText = `${(cuisineType === "N/A" ? "" : cuisineType + " • ")}${itemTypeName}`;
+                            businessType.style.color = "gray";
+                            right.appendChild(businessType);
+
+                            const location = document.createElement('div');
+                            const marker = document.createElement('img');
+                            marker.style.height = "25px";
+                            marker.style.width = "25px";
+                            const locText = document.createElement("h3");
+                            marker.src = "https://i.postimg.cc/Rh97Nzsb/maps-and-flags.png";
+                            location.classList.add("innerRightLocation");
+                            locText.innerText = `${(element.tags['addr:housenumber'] === undefined ? "" : element.tags['addr:housenumber'] + ",")} ${(element.tags['addr:street'] === undefined ? "" : element.tags['addr:street'])}`;
+                            locText.style.justifySelf = "start";
+                            locText.style.marginTop = "5px";
+                            location.appendChild(marker);
+                            location.appendChild(locText);
+                            right.appendChild(location);
+
+
+
+
+                            
                             // store element data for full card
                             div.dataset.lat = element.lat;
                             div.dataset.lon = element.lon;
                             div.dataset.name = name;
                             div.dataset.type = itemTypeName || 'Other';
-                            div.dataset.cuisine = cuisineType;
+                            div.dataset.cuisine = ` ${cuisineType} | `;
                             div.dataset.hours = open;
                             div.dataset.accessibility = accessibility;
                             div.dataset.website = website;
@@ -183,9 +221,18 @@
                             div.addEventListener('click', () => {
                                 // populate #shop
                                 const shopElem = document.getElementById('shop');
+                                const specsElem = document.getElementById('specs');
                                 if (shopElem) shopElem.textContent = div.dataset.name;
+                                if (specsElem) specsElem.textContent = /* (div.dataset.cuisine !== " N/A | " ? div.dataset.cuisine : " ") + */ `| ${div.dataset.type}`;
+                                if (shopElem) {
+                                    if (div.dataset.website.includes("next.html") || div.dataset.website.includes("N/A")) {
+                                        shopElem.removeAttribute("href");
+                                    } else {
+                                        shopElem.href = div.dataset.website;
+                                    }
+                                }
 
-                                // populate #image
+                                /* populate #image
                                 const imageElem = document.getElementById('image');
                                 if (imageElem) {
                                     if (div.dataset.image) {
@@ -195,6 +242,7 @@
                                         imageElem.style.display = 'none';
                                     }
                                 }
+                                */
 
                                 // highlight selected
                                 document.querySelectorAll('.resultItem').forEach(item => item.style.backgroundColor = '');
