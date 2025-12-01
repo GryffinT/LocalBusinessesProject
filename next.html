@@ -181,32 +181,57 @@
                             const text = document.createElement('h1');
                             text.classList.add("innerRight");
                             text.innerHTML = name;
+                            text.style.marginBottom = "0px";
                             right.appendChild(text);
 
                             const businessType = document.createElement('h3');
                             businessType.classList.add("innerRight");
                             businessType.innerText = `${(cuisineType === "N/A" ? "" : cuisineType + " • ")}${itemTypeName}`;
                             businessType.style.color = "gray";
+                            businessType.style.marginTop = "auto";
                             right.appendChild(businessType);
 
                             const location = document.createElement('div');
                             const marker = document.createElement('img');
-                            marker.style.height = "25px";
-                            marker.style.width = "25px";
+                            marker.style.height = "15px";
+                            marker.style.width = "15px";
                             const locText = document.createElement("h3");
                             marker.src = "https://i.postimg.cc/Rh97Nzsb/maps-and-flags.png";
                             location.classList.add("innerRightLocation");
-                            locText.innerText = `${(element.tags['addr:housenumber'] === undefined ? "" : element.tags['addr:housenumber'] + ",")} ${(element.tags['addr:street'] === undefined ? "" : element.tags['addr:street'])}`;
+                            locText.innerText = `${(element.tags['addr:housenumber'] === undefined ? " " : element.tags['addr:housenumber'] + ",")} ${(element.tags['addr:street'] === undefined ? " " : element.tags['addr:street'])}`;
                             locText.style.justifySelf = "start";
-                            locText.style.marginTop = "5px";
+                            locText.style.color = "gray";
+                            locText.style.fontWeight = "bold";
                             location.appendChild(marker);
                             location.appendChild(locText);
                             right.appendChild(location);
 
+                            const saleIcon = document.createElement('img');
+                            const salesContainer = document.createElement('div');
+                            const salesLabeler = document.createElement('div');
+                            const sale = document.createElement('div')
+                            const deals = document.createElement('h3');
+                            const salesTag = document.createElement('span');
+                            saleIcon.src = "https://i.postimg.cc/YS55Y1mY/sale.png";
+                            saleIcon.style.width = "15px";
+                            saleIcon.style.height = "15px";
+                            deals.innerText = "Deals";
+                            deals.style.color = "gray";
+                            salesLabeler.classList.add("salesLabel");
+                            salesLabeler.appendChild(saleIcon);
+                            salesLabeler.appendChild(deals);
 
+                            sale.classList.add('sale');
+                            sale.innerHTML = "Hello";
+                            salesTag.classList.add("saleAmount")
+                            salesTag.innerHTML = "50% OFF";
+                            sale.appendChild(salesTag);
+                            salesContainer.style.width = "100%";
+                            salesContainer.appendChild(sale);
 
+                            right.appendChild(salesLabeler);
+                            right.appendChild(salesContainer);
 
-                            
                             // store element data for full card
                             div.dataset.lat = element.lat;
                             div.dataset.lon = element.lon;
