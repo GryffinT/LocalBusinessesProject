@@ -80,9 +80,26 @@
                 </select>
 
                 <script>
+
+                const lat = localStorage.getItem('user_latitude');
+                const lon = localStorage.getItem('user_longitude');
+                const apiKey = 'MMXckXut';
+
+                async function fetchDealsForBusiness(name, lat, lon, apiKey) {
+                    if (!name || !name.trim()) return ["NO_NAME"];
+                    const url = `https://api.discountapi.com/v2/deals?api_key=${apiKey}&query=${encodeURIComponent(name)}&lat=${lat}&lon=${lon}&radius=6000`;
+                    try {
+                        const res = await fetch(url);
+                        if (!res.ok) return [];
+                        const data = await res.json();
+                        return data.deals || [];
+                    } catch (e) {
+                        console.error("Deal fetch error for:", name, e);
+                        return [];
+                    }
+                }
+
                 async function fetchLocalBusinesses() {
-                    const lat = localStorage.getItem('user_latitude');
-                    const lon = localStorage.getItem('user_longitude');
                     const selection = document.getElementById("selection").value;
 
                     if (!lat || !lon) {
@@ -231,6 +248,21 @@
 
                             right.appendChild(salesLabeler);
                             right.appendChild(salesContainer);
+
+                            let dealsData = fetchDealsForBusiness(name, lat, lon, apiKey);
+
+                            if (dealsData.length > 0) {
+                                const first = dealsData[0];
+                                const dealTitle = first.deal.title || "Deal";
+                                const dealText = first.deal.fine_print || "";
+                                const merchantJson = first.deal.merchant || {}; // fallback to empty object
+                                const locality = merchantJson.locality || "NONE";
+                                let dealAmount = first.deal.discount_percentage ? first.deal.discount_percentage * 100 : 0;
+                                dealAmount = Math.round(dealAmount * 10) / 10;
+                                sale.innerHTML = `${dealTitle} - ${dealText} - ${locality}<span class="saleAmount">${dealAmount}% OFF</span>`;
+                            } else {
+                                sale.innerHTML = "No deals found.";
+                            }
 
                             // store element data for full card
                             div.dataset.lat = element.lat;
