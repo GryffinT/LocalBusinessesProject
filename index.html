@@ -151,7 +151,7 @@
                     showError("Unexpected error. Check console.");
                 }
             });
-
+            // Test
             (async () => {
                 const { data: { user } } = await supabase.auth.getUser();
                 if (user) {
@@ -162,3 +162,4 @@
         </script>
     </body>
 </html>
+
